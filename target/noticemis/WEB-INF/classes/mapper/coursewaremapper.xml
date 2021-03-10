@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.daowen.mapper.CoursewareMapper">
+
+
+
+    <select id="getReaded" resultType="com.daowen.entity.Courseware" parameterType="hashmap">
+
+        select * from courseware cw
+        where
+         EXISTS(select *  from readrecord rc
+        where  rc.targetid=cw.id
+          <if test="actorid!=null ">
+             and rc.actorid=#{actorid}
+          </if>
+        )
+        <if test="title!=null">
+            and cw.title like '%${title}%'
+        </if>
+
+
+    </select>
+
+    <select id="getUnread" resultType="com.daowen.entity.Courseware" parameterType="hashmap">
+
+        select * from courseware cw
+        where
+        NOT EXISTS(select *  from readrecord rc
+        where  rc.targetid=cw.id
+        <if test="actorid!=null ">
+            and rc.actorid=#{actorid}
+        </if>
+        )
+        <if test="title!=null">
+            and cw.title like '%${title}%'
+        </if>
+
+
+    </select>
+
+
+    <select id="getReadedStudent" resultType="student" parameterType="map">
+            select s.* from readrecord rc ,student s
+            where  rc.actorid=s.id
+            <if test="id">
+                and  rc.targetid=#{id}
+            </if>
+    </select>
+
+    <select id="getUnreadStudent" resultType="student" parameterType="map">
+        select s.* from student s
+        where
+         not exists(select *  from readrecord rc
+        where  rc.actorid=s.id and rc.targetid=#{id})
+
+    </select>
+
+    <update id="updateCheckTime">
+        update courseware set last_check_time=now() where id=#{id}
+    </update>
+
+
+</mapper>

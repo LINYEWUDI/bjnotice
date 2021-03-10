@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="noticemis:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>noticemis</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="noticemis.war">
+      <element id="artifact" artifact-name="noticemis:war exploded" />
+    </root>
+  </artifact>
+</component>
